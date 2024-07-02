@@ -5,6 +5,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 
 import connect from "./DataBase/mongoDB.js";
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true })); //to parse req.body in urlencod
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
 
 app.get("/health", (req, res) => {
   res.send("Server is perfectly running without any issues");
