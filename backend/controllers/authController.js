@@ -55,13 +55,17 @@ export const logIn = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user?.password || ""
-    );
-    if (!user || !isPasswordCorrect) {
+
+    // Check if user exists before comparing passwords
+    if (!user) {
       return res.status(400).json({ message: "Invalid username or password" });
     }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
+
     generateTokenAndSetCookie(user._id, res);
     res.status(200).json({
       _id: user._id,
@@ -78,15 +82,16 @@ export const logIn = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 export const logOut = async (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
-    console.log("Error in logout controller", error.message);
+    console.log("Error in logOut controller", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
