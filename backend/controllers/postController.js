@@ -183,7 +183,7 @@ export const getAllFollowingPosts = async (req, res) => {
   }
 };
 
-export const getUserPosts = async () => {
+export const getUserPosts = async (req, res) => {
   try {
     const { username } = req.params;
     const user = await User.findOne({ username });
