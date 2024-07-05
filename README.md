@@ -25,7 +25,7 @@ To get started with the project, follow the instructions below:
 
 2. **Install dependencies:**
    ```bash
-   npm run build
+   npm install
    ```
 
 3. **Run the development server:**
@@ -35,7 +35,7 @@ To get started with the project, follow the instructions below:
 
 4. **Run the production server:**
    ```bash
-   npm start
+   npm run start
    ```
 
 ## Project Structure
