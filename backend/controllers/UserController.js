@@ -42,7 +42,6 @@ export const followUnfollowUser = async (req, res) => {
       // follow the user
       await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } });
       await User.findByIdAndUpdate(req.user._id, { $push: { following: id } });
-      //Todo return the id of the user as a response
 
       //Send a notification to the user
       const newNotification = new Notification({
@@ -51,7 +50,7 @@ export const followUnfollowUser = async (req, res) => {
         to: userToModify._id,
       });
       await newNotification.save();
-      //Todo return the id of the user as a response
+
       res.status(200).json({ message: "User followed succesfully" });
     }
   } catch (error) {
@@ -78,6 +77,7 @@ export const getSuggestedUsers = async (req, res) => {
     );
     const suggestedUsers = filteredUsers.slice(0, 4);
     suggestedUsers.forEach((user) => (user.password = null));
+    res.status(200).json(suggestedUsers);
   } catch (error) {
     console.log("Error in getSuggestedUsers: ", error.message);
     res.status(500).json({ error: error.message });
