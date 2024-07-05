@@ -232,7 +232,9 @@ const Post = ({ post }) => {
                                     <FaRegHeart className='w-4 h-4 cursor-pointer text-slate-500 group-hover:text-pink-500' />
                                 )}
                                 {isLiked && !isLiking && (
-                                    <FaRegHeart className='w-4 h-4 cursor-pointer text-pink-500 ' />
+                                    <div className="bg-pink-500">
+                                        <FaRegHeart className='w-4 h-4 cursor-pointer   text-black ' />
+                                    </div>
                                 )}
 
                                 <span
