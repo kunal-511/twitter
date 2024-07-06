@@ -1,10 +1,8 @@
-Sure, here's a README for your project:
-
 ---
 
-# Project Name
+# Twitter Clone
 
-This project is a full-stack application with a backend built with Node.js and a frontend built with React. The project is structured into two main folders: `backend` and `frontend`.
+This project is a full-stack clone  application with a backend built with Node.js and a frontend built with React. The project is structured into two main folders: `backend` and `frontend`.
 
 ## Table of Contents
 
@@ -64,22 +62,6 @@ project-name/
 ├── package.json
 └── README.md
 ```
-
-## Available Scripts
-
-In the project directory, you can run the following scripts:
-
-### `npm run dev`
-
-Runs the backend server in development mode using `nodemon`. The server will automatically restart if there are any changes to the code.
-
-### `npm start`
-
-Runs the backend server in production mode.
-
-### `npm run build`
-
-Installs the dependencies for both the backend and frontend, and builds the frontend application.
 
 
 ## Technologies Used
