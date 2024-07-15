@@ -4,11 +4,17 @@ FROM node:16 AS build
 # Set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files
-COPY package.json .
+# Copy the backend package.json and package-lock.json files
+COPY package.json package-lock.json ./
 
-# Install dependencies for both backend and frontend
-RUN npm install && npm install --prefix frontend
+# Copy the frontend package.json and package-lock.json files
+COPY frontend/package.json frontend/package-lock.json ./frontend/
+
+# Install dependencies for the backend
+RUN npm install
+
+# Install dependencies for the frontend
+RUN npm install --prefix frontend
 
 # Copy the entire project to the working directory
 COPY . .
@@ -22,17 +28,17 @@ FROM node:16 AS production
 # Set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files
-COPY package.json .
+# Copy the backend package.json and package-lock.json files
+COPY package.json package-lock.json ./
 
-# Install only production dependencies
+# Install only production dependencies for the backend
 RUN npm install --only=production
 
 # Copy the backend code
 COPY backend ./backend
 
 # Copy the frontend build to the backend's public directory
-COPY --from=build /app/frontend/build ./backend/public
+COPY --from=build /app/frontend/dist ./backend/public
 
 # Set the environment variable
 ENV NODE_ENV=production
