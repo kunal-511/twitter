@@ -1,50 +1,42 @@
-# Use Node.js for the build environment
-FROM node:16 AS build
+# Stage 1: Build the frontend
+FROM node:16-alpine as build-frontend
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the backend package.json and package-lock.json files
-COPY package.json package-lock.json ./
-
-# Copy the frontend package.json and package-lock.json files
-COPY frontend/package.json frontend/package-lock.json ./frontend/
-
-# Install dependencies for the backend
+# Copy main package.json and install dependencies for both backend and frontend
+COPY package.json ./
 RUN npm install
 
-# Install dependencies for the frontend
+# Copy the frontend package.json and install frontend dependencies
+COPY frontend/package.json ./frontend/
 RUN npm install --prefix frontend
 
-# Copy the entire project to the working directory
-COPY . .
-
-# Build the frontend
+# Copy the frontend source code and build it
+COPY frontend ./frontend/
 RUN npm run build --prefix frontend
 
-# Use Node.js for the production environment
-FROM node:16 AS production
+# Stage 2: Set up the backend
+FROM node:16-alpine
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy the backend package.json and package-lock.json files
-COPY package.json package-lock.json ./
+# Copy main package.json and install backend dependencies
+COPY package.json ./
+RUN npm install
 
-# Install only production dependencies for the backend
-RUN npm install --only=production
-
-# Copy the backend code
+# Copy backend source code
 COPY backend ./backend
 
-# Copy the frontend build to the backend's public directory
-COPY --from=build /app/frontend/dist ./backend/public
+# Copy the built frontend files from the build stage
+COPY --from=build-frontend /app/frontend/dist ./frontend/dist
 
-# Set the environment variable
-ENV NODE_ENV=production
+# Copy environment variables file from the context root
+COPY .env .env
 
-# Expose the port your app runs on
+# Expose the port the app runs on
 EXPOSE 5000
 
-# Start the application
-CMD ["node", "backend/server.js"]
+# Start the backend server
+CMD ["npm", "run", "start"]
