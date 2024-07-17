@@ -70,4 +70,8 @@ project-name/
 - **Frontend**: React,tanstack/react-query , Material-UI, 
 - **Other**: cross-env, nodemon
 
+
+## To run the docker container
+docker run -p 5000:5000 --env-file .env twitter-app
+
 ---
