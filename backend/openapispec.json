@@ -1,0 +1,200 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Social Media API",
+    "description": "API for a social media platform with authentication, user profiles, posts, and notifications.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/api/auth/health": {
+      "get": {
+        "summary": "Check auth service health",
+        "responses": {
+          "200": {
+            "description": "Auth routes are properly running"
+          }
+        }
+      }
+    },
+    "/api/auth/signup": {
+      "post": {
+        "summary": "User signup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "fullname": { "type": "string" },
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "password": { "type": "string", "minLength": 6 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User signed up successfully" },
+          "400": {
+            "description": "Username or Email already exists or password is too short"
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "User login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User logged in successfully" },
+          "400": { "description": "Invalid username or password" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "User logout",
+        "responses": {
+          "200": { "description": "Logged out successfully" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "summary": "Get logged-in user information",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "User details fetched successfully" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/users/profile/{username}": {
+      "get": {
+        "summary": "Get user profile by username",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "User profile fetched successfully" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/users/follow/{id}": {
+      "post": {
+        "summary": "Follow or unfollow a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "User followed or unfollowed successfully" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/posts/create": {
+      "post": {
+        "summary": "Create a new post",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Post created successfully" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/posts/like/{id}": {
+      "post": {
+        "summary": "Like or unlike a post",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Post liked or unliked successfully" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "summary": "Get all notifications",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Notifications fetched successfully" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete all notifications",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Notifications deleted successfully" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
