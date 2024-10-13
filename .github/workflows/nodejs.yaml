@@ -38,8 +38,16 @@ jobs:
       - name: Build frontend
         run: npm run build --prefix frontend
 
-      # Step 5: Run backend server (development)
+       # Step 5: Run backend server (development)
       - name: Start backend server
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          PORT: ${{ secrets.PORT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          NODE_ENV: development
         run: npm run dev
 
       # Optional: Add a step to run tests (if you have test scripts)
