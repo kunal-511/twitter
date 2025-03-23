@@ -1,0 +1,21 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: twitter-deployment
+  namespace: twitter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: twitter
+  template:
+    metadata: 
+      name: twitter-app-pod
+      labels:
+        app: twitter
+    spec:
+      containers:
+        - name: twitter-app
+          image: kunal245/twitter-app:latest
+          ports:
+            - containerPort: 5000
