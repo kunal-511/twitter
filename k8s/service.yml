@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: twitter-service
+  namespace: twitter
+spec:
+  selector:
+    app: twitter
+  ports:
+    - protocol: TCP
+      port: 8020
+      targetPort: 5000
+  type: ClusterIP
